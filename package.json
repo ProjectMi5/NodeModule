@@ -20,6 +20,7 @@
   "repository": "https://github.com/ProjectMi5/CloudLink",
   "dependencies": {
     "async": "^1.4.2",
+    "better-assert": "^1.0.2",
     "node-opcua": "0.0.48",
     "q": "^1.4.1",
     "underscore": "^1.8.3"

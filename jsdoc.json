@@ -9,7 +9,7 @@
     },
     "plugins": [],
     "templates": {
-        "cleverLinks": true,
+        "cleverLinks": false,
         "monospaceLinks": false,
         "default": {
             "outputSourceFiles": true
