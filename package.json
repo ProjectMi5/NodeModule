@@ -19,7 +19,8 @@
   "license": "MIT",
   "repository": "https://github.com/ProjectMi5/CloudLink",
   "dependencies": {
-    "promise": "^7.0.1",
+    "async": "^1.4.2",
+    "node-opcua": "0.0.48",
     "q": "^1.4.1",
     "underscore": "^1.8.3"
   },

@@ -4,6 +4,38 @@
 [0m    #indexOf()[0m
 [2K[0G    [32m  √[0m[90m should return -1 when the value is not present[0m
 
+[0m  Test OPC UA library[0m
+initialized
+Server is now listening ... ( press CTRL+C to stop)
+port  4334
+ the primary server endpoint url is  opc.tcp://H3L1X:4334/UA/InputModuleMock
+[0m    test opcua instance[0m
+[0m      #connectQ() connect to mock opc ua server[0m
+client created
+nodeid =  undefined
+ Warning:   { namespaceIndex: 0, name: 'EventId' } ns=0;i=2042 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'EventType' } ns=0;i=2043 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'SourceNode' } ns=0;i=2044 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'Time' } ns=0;i=2046 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'ReceiveTime' } ns=0;i=2047 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'LocalTime' } ns=0;i=3190 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'Message' } ns=0;i=2050 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'Severity' } ns=0;i=2051 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'ClientCertificate' } ns=0;i=2073 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'ClientCertificateThumbprint' } ns=0;i=2747 exists but dataValue has not been defined
+ Warning:   { namespaceIndex: 0, name: 'RevisedSessionTimeout' } ns=0;i=2074 exists but dataValue has not been defined
+session created
+[2K[0G      [32m  √[0m[90m opc.connected should be true[0m[31m (125ms)[0m
+[0m      #readArrayQ read an array of nodes[0m
+[2K[0G      [32m  √[0m[90m read one boolean element[0m
+[0m      #readQ[0m
+{ nodeId: 'MI5.Module2501.Input.SkillInput.SkillInput0.Execute',
+  value: false }
+[2K[0G      [32m  √[0m[90m read one element[0m
+[0m      #disconnectQ from mock opc ua server[0m
+[1m[33mwarning : disconnection : closing pending sessions[39m[22m
+[2K[0G      [32m  √[0m[90m opc.connected should be false[0m
 
-[92m [0m[32m 1 passing[0m[90m (12ms)[0m
+
+[92m [0m[32m 5 passing[0m[90m (1s)[0m
 
