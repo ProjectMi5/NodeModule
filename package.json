@@ -1,0 +1,33 @@
+{
+  "name": "PassiveModule",
+  "version": "0.0.1",
+  "description": "Acts as a state machine that mimicks a module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "grunt",
+    "docs": "jsdoc -c jsdoc.json -d ./docs"
+  },
+  "keywords": [
+    "cloud",
+    "mqtt",
+    "showcase",
+    "mi5",
+    "gcm"
+  ],
+  "author": "Thomas Frei",
+  "license": "MIT",
+  "repository": "https://github.com/ProjectMi5/CloudLink",
+  "dependencies": {
+    "promise": "^7.0.1",
+    "q": "^1.4.1",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "chai-as-promised": "^5.0.0",
+    "grunt": "^0.4.5",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.2.5"
+  }
+}
