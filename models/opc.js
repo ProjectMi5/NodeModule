@@ -112,11 +112,13 @@ opcua.prototype.disconnectQ = function(){
 };
 
 //==================================================================================
-//========================= Data Handling ==========================================
+//========================= Read Element ===========================================
 //==================================================================================
 
 /**
  * Read an Array of nodeids
+ *
+ * Basic function. It is used by several derivated functions like readArrayQ and read.
  *
  * @param nodes
  * @param callback
@@ -142,6 +144,7 @@ opcua.prototype.readArray = function(nodes, callback) {
  * Read only one element
  *
  * @experimental - not tested
+ * @uses readArray()
  * @param node
  * @param callback
  */
@@ -155,6 +158,7 @@ opcua.prototype.read = function(node, callback){
 
 /**
  * Promise API for readArray()
+ * @uses readArray()
  * @param nodes
  * @returns {Promise}
  */
@@ -171,6 +175,12 @@ opcua.prototype.readArrayQ = function(nodes){
   });
 };
 
+/**
+ * Read one element
+ *
+ * @uses readArrayQ()
+ * @param node
+ */
 opcua.prototype.readQ = function(node){
   var self = this;
 
