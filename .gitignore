@@ -4,3 +4,4 @@ node_modules
 .idea
 grunt-tests-results.txt
 docs
+config.js
