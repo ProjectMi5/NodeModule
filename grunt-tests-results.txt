@@ -6,6 +6,12 @@
 
 [0m  Test OPC UA library[0m
 initialized
+created:  ns=4;s=MI5.Module2501.Input.PositionInput
+created:  ns=4;s=MI5.Module2501.Input.SkillInput.SkillInput0.Execute
+created:  ns=4;s=MI5.Recipe[0].Description
+created:  ns=4;s=MI5.Recipe[0].Name
+created:  ns=4;s=MI5.Recipe[0].RecipeID
+err null
 Server is now listening ... ( press CTRL+C to stop)
 port  4334
  the primary server endpoint url is  opc.tcp://H3L1X:4334/UA/InputModuleMock
@@ -25,17 +31,24 @@ nodeid =  undefined
  Warning:   { namespaceIndex: 0, name: 'ClientCertificateThumbprint' } ns=0;i=2747 exists but dataValue has not been defined
  Warning:   { namespaceIndex: 0, name: 'RevisedSessionTimeout' } ns=0;i=2074 exists but dataValue has not been defined
 session created
-[2K[0G      [32m  √[0m[90m opc.connected should be true[0m[31m (125ms)[0m
-[0m      #readArrayQ read an array of nodes[0m
+[2K[0G      [32m  √[0m[90m opc.connected should be true[0m[31m (109ms)[0m
+[0m      #readArrayQ() read an array of nodes[0m
+[ { nodeId: 'MI5.Module2501.Input.SkillInput.SkillInput0.Execute',
+    value: false } ]
 [2K[0G      [32m  √[0m[90m read one boolean element[0m
-[0m      #readQ[0m
+[0m      #readQ()[0m
 { nodeId: 'MI5.Module2501.Input.SkillInput.SkillInput0.Execute',
   value: false }
 [2K[0G      [32m  √[0m[90m read one element[0m
-[0m      #disconnectQ from mock opc ua server[0m
+[0m      #write()[0m
+null { value: 0, description: 'No Error', name: 'Good' }
+[2K[0G      [32m  √[0m[90m should overwrite execute with true[0m
+[0m      #writeQ()[0m
+[2K[0G      [32m  √[0m[90m should overwrite execute with false[0m
+[0m      #disconnectQ() from mock opc ua server[0m
 [1m[33mwarning : disconnection : closing pending sessions[39m[22m
 [2K[0G      [32m  √[0m[90m opc.connected should be false[0m
 
 
-[92m [0m[32m 5 passing[0m[90m (1s)[0m
+[92m [0m[32m 7 passing[0m[90m (1s)[0m
 
