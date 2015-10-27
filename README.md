@@ -1,4 +1,4 @@
-# Passive Module
+# Mi5 Node-Module (-Interface)
 
 ## Installation
 
