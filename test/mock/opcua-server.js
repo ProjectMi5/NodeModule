@@ -31,6 +31,7 @@ function construct_my_address_space(server) {
   createOpcuaVariable('SkillInput0', 'MI5.Module2501.Input.PositionInput', 'Double', 0);
   createOpcuaVariable('SkillInput0', 'MI5.Module2501.Input.SkillInput.SkillInput0.Execute', 'Boolean', false);
 
+
   server.engine.addFolder("Mi5", {browseName: "Recipe"});
   server.engine.addFolder("Recipe", {browseName: "Recipe[0]"});
   createOpcuaVariable('Recipe[0]', 'MI5.Recipe[0].Description', 'String', 'Recipe 0 description');
@@ -54,7 +55,10 @@ var serverQ = function(){
 // exports a promise, so that the sole require does not start a server.
 exports.instance = function(){
   return Q.promise(function(resolve){
-    serverQ().then(post_initialize).then(start_server).then(resolve);
+    serverQ()
+      .then(post_initialize)
+      .then(start_server)
+      .then(resolve);
   });
 }
 
