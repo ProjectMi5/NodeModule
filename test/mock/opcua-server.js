@@ -22,21 +22,63 @@ var server = new opcua.OPCUAServer({
  * @param server
  */
 function construct_my_address_space(server) {
+  // Mi5-Tag
   server.engine.addFolder("RootFolder", {browseName: "Mi5"});
-  server.engine.addFolder("Mi5", {browseName: "Module2501"});
-  server.engine.addFolder("Module2501", {browseName: "Input"});
-  server.engine.addFolder("Input", {browseName: "SkillInput"});
-  server.engine.addFolder("SkillInput", {browseName: "SkillInput0"});
 
-  createOpcuaVariable('SkillInput0', 'MI5.Module2501.Input.PositionInput', 'Double', 0);
+  // Module-Interface
+  server.engine.addFolder("Mi5", {browseName: "Module2501"});
+
+  // Module-Interface Input
+  server.engine.addFolder("Module2501", {browseName: "Input"});
+  createOpcuaVariable('Input', 'MI5.Module2501.Input.PositionInput', 'Double', 0);
+  server.engine.addFolder("Input", {browseName: "SkillInput"});
+  server.engine.addFolder("SkillInput", {browseName: "SkillInput0"}); // old Array structure
   createOpcuaVariable('SkillInput0', 'MI5.Module2501.Input.SkillInput.SkillInput0.Execute', 'Boolean', false);
 
+  // Module-Interface Output
+  server.engine.addFolder("Module2501", {browseName: "Output"});
+  server.engine.addFolder("Output", {browseName: "SkillOutput"});
+  server.engine.addFolder("SkillOutput", {browseName: "SkillOutput0"});
+  createOpcuaVariable('SkillOutput0', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.ID', 'Int16', 8765);
+  createOpcuaVariable('SkillOutput0', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Name', 'String', 'SkillOutput0 / Description');
+  createOpcuaVariable('SkillOutput0', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Ready', 'Boolean', true);
+  createOpcuaVariable('SkillOutput0', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Busy', 'Boolean', false);
+  createOpcuaVariable('SkillOutput0', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Done', 'Boolean', false);
+  createOpcuaVariable('SkillOutput0', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Error', 'Boolean', false);
+  server.engine.addFolder("SkillOutput0", {browseName: "ParameterSO0"}); // Folder needs unique name, therfore deviation from module-interface
+  server.engine.addFolder("ParameterSO0", {browseName: "ParameterSO00"}); // temp convention: SOx for SkillOutputx, Parameter Count, SOxy
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.ID', 'Int16', 8765);
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.Name', 'String', 'Parameter0 Desription - Marmelade');
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.Unit', 'String', 'ml');
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.Value', 'Int16', 0);
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.Default', 'Int16', 50);
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.MinValue', 'Int16', 10);
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.MaxValue', 'Int16', 100);
+  createOpcuaVariable('ParameterSO00', 'MI5.Module2501.Output.SkillOutput.SkillOutput0.Parameter.Parameter0.Required', 'Boolean', true);
 
+  // StateValues
+  server.engine.addFolder("Mi5", {browseName: "StateValue"});
+  server.engine.addFolder("StateValue", {browseName: "StateValue0"});
+  createOpcuaVariable('StateValue0', 'MI5.Module2501.StateValue.StateValue0.Value', 'Int16', 40);
+  createOpcuaVariable('StateValue0', 'MI5.Module2501.StateValue.StateValue0.Name', 'String', 'Percentage Done');
+  createOpcuaVariable('StateValue0', 'MI5.Module2501.StateValue.StateValue0.Description', 'String', 'Percentage of done - Long Description'); // max-size=200
+  createOpcuaVariable('StateValue0', 'MI5.Module2501.StateValue.StateValue0.Unit', 'String', '%');
+  server.engine.addFolder("StateValue", {browseName: "StateValue1"});
+  createOpcuaVariable('StateValue1', 'MI5.Module2501.StateValue.StateValue1.StringValue', 'String', 'http://xyz.de/id=123453');
+  createOpcuaVariable('StateValue1', 'MI5.Module2501.StateValue.StateValue1.Name', 'String', 'Last Scan');
+  createOpcuaVariable('StateValue1', 'MI5.Module2501.StateValue.StateValue1.Description', 'String', 'URL to the .ojb/.stl file of the last object that has been scanned'); // max-size=200
+  createOpcuaVariable('StateValue1', 'MI5.Module2501.StateValue.StateValue1.Unit', 'String', 'string');
+
+  // Recipe Mock
   server.engine.addFolder("Mi5", {browseName: "Recipe"});
-  server.engine.addFolder("Recipe", {browseName: "Recipe[0]"});
+  server.engine.addFolder("Recipe", {browseName: "Recipe[0]"}); // newer Array Structure
   createOpcuaVariable('Recipe[0]', 'MI5.Recipe[0].Description', 'String', 'Recipe 0 description');
   createOpcuaVariable('Recipe[0]', 'MI5.Recipe[0].Name', 'String', 'XTS one Round');
   createOpcuaVariable('Recipe[0]', 'MI5.Recipe[0].RecipeID', 'Int16', 10001);
+  server.engine.addFolder("Recipe", {browseName: "Recipe[1]"}); // newer Array Structure
+  createOpcuaVariable('Recipe[1]', 'MI5.Recipe[1].Description', 'String', 'Recipe 1 description');
+  createOpcuaVariable('Recipe[1]', 'MI5.Recipe[1].Name', 'String', 'XTS two Round');
+  createOpcuaVariable('Recipe[1]', 'MI5.Recipe[1].RecipeID', 'Int16', 10002);
 }
 
 /**
@@ -51,7 +93,7 @@ var serverQ = function(){
   return Q.Promise(function(resolve){
     server.initialize(resolve);
   });
-}
+};
 // exports a promise, so that the sole require does not start a server.
 exports.instance = function(){
   return Q.promise(function(resolve){
@@ -60,16 +102,19 @@ exports.instance = function(){
       .then(start_server)
       .then(resolve);
   });
-}
+};
 
 /**
  * Create a console interface
  *
  * start the server directly using:
- * // $..PassiveModule\test\mock>node opcua-server.js --startServer
+ * // $..PassiveModule\test\mock>node opcua-server.js --start
  */
 if(process.argv.pop() == '--start'){
-  serverQ().then(post_initialize).then(start_server);
+  serverQ()
+    .then(post_initialize)
+    .then(start_server)
+    .catch(console.log);
 }
 
 /**
