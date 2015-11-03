@@ -29,7 +29,3 @@ or manually with:
 Run the Tests:
 
 `npm test`
-
-(deprecated) Rebuild the documentation:
-
-`npm run-script docs`
