@@ -79,6 +79,43 @@ function construct_my_address_space(server) {
   createOpcuaVariable('Recipe[1]', 'MI5.Recipe[1].Description', 'String', 'Recipe 1 description');
   createOpcuaVariable('Recipe[1]', 'MI5.Recipe[1].Name', 'String', 'XTS two Round');
   createOpcuaVariable('Recipe[1]', 'MI5.Recipe[1].RecipeID', 'Int16', 10002);
+
+  // Order-tool
+  server.engine.addFolder("Mi5", {browseName: "Order"});
+  server.engine.addFolder("Order", {browseName: "Order[0]"});
+  var localPending = false;
+  function pendingSet(variant){
+    localPending = variant.value; // boolean cast
+    // Reset false after it has been set to true
+    if(variant.value == true){
+      setTimeout(function(){
+        localPending = false;
+      },1000);
+    }
+    return opcua.StatusCodes.Good;
+  }
+  function pendingGet(){
+    return new opcua.Variant({dataType: opcua.DataType['Boolean'], value: localPending });
+  }
+  createOpcuaVariable('Order[0]', 'MI5.Order[0].Pending', 'Boolean', false, pendingSet, pendingGet);
+  createOpcuaVariable('Order[0]', 'MI5.Order[0].Locked', 'Boolean', false);
+  createOpcuaVariable('Order[0]', 'MI5.Order[0].Name', 'String', '');
+  createOpcuaVariable('Order[0]', 'MI5.Order[0].RecipeID', 'Int16', 0);
+  createOpcuaVariable('Order[0]', 'MI5.Order[0].TaskID', 'Int16', 0);
+  server.engine.addFolder("Order[0]", {browseName: "UserParameter"});
+  server.engine.addFolder("UserParameter", {browseName: "UserParameter[0]"});
+  createOpcuaVariable('UserParameter[0]', 'MI5.Order[0].UserParameter[0].Value', 'Int16', 0);
+  server.engine.addFolder("UserParameter", {browseName: "UserParameter[1]"});
+  createOpcuaVariable('UserParameter[1]', 'MI5.Order[0].UserParameter[1].Value', 'Int16', 0);
+  server.engine.addFolder("UserParameter", {browseName: "UserParameter[2]"});
+  createOpcuaVariable('UserParameter[2]', 'MI5.Order[0].UserParameter[2].Value', 'Int16', 0);
+  server.engine.addFolder("UserParameter", {browseName: "UserParameter[3]"});
+  createOpcuaVariable('UserParameter[3]', 'MI5.Order[0].UserParameter[3].Value', 'Int16', 0);
+  server.engine.addFolder("UserParameter", {browseName: "UserParameter[4]"});
+  createOpcuaVariable('UserParameter[4]', 'MI5.Order[0].UserParameter[4].Value', 'Int16', 0);
+  server.engine.addFolder("UserParameter", {browseName: "UserParameter[5]"});
+  createOpcuaVariable('UserParameter[5]', 'MI5.Order[0].UserParameter[5].Value', 'Int16', 0);
+
 }
 
 /**
@@ -183,7 +220,7 @@ var localVars = [];
  * @param type
  * @param value
  */
-function createOpcuaVariable(parent, nodeId, type, value){
+function createOpcuaVariable(parent, nodeId, type, value, setter, getter) {
   var helper = require('./../../models/opc-helper.js').helper;
 
   nodeId = helper.checkAndCorrectNodeId(nodeId);
@@ -193,6 +230,27 @@ function createOpcuaVariable(parent, nodeId, type, value){
   var currentElement = localVars.length;
   localVars[currentElement] = value;
 
+  // functions
+  function defSetter(variant) {
+    if (type == 'Double') {
+      localVars[currentElement] = parseFloat(variant.value);
+    } else if (type == 'Int16' || type == 'UInt16') {
+      localVars[currentElement] = parseInt(variant.value, 10);
+    } else { // e.g. String, Boolean
+      localVars[currentElement] = variant.value;
+    }
+    return opcua.StatusCodes.Good;
+  }
+  function defGetter(){
+    return new opcua.Variant({dataType: opcua.DataType[type], value: localVars[currentElement] });
+  }
+  if(typeof setter == 'function'){
+    defSetter = setter;
+  }
+  if(typeof getter == 'function'){
+    defGetter = getter;
+  }
+
   // generate random string for adding to server object
   var randomString  = createVariableName();
   try{
@@ -201,19 +259,8 @@ function createOpcuaVariable(parent, nodeId, type, value){
       browseName: browseName,
       dataType: type,
       value: {
-        get: function () {
-          return new opcua.Variant({dataType: opcua.DataType[type], value: localVars[currentElement] });
-        },
-        set: function (variant) {
-          if( type == 'Double'){
-            localVars[currentElement] = parseFloat(variant.value);
-          } else if ( type == 'Int16' ||  type == 'UInt16') {
-            localVars[currentElement] = parseInt(variant.value, 10);
-          } else { // e.g. String, Boolean
-            localVars[currentElement] = variant.value;
-          }
-          return opcua.StatusCodes.Good;
-        }
+        get: defGetter,
+        set: defSetter
       }
     };
     server[randomString] = server.engine.addVariable(parent, options);

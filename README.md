@@ -1,5 +1,9 @@
 # Mi5 Node-Module (-Interface)
 
+This is work in progress..., there is a mock OPC UA server for testing (./test/mock/opcua-server.js)
+Roadmap:
+* update node-opcua version
+
 ## Installation
 
 `git clone https://github.com/ProjectMi5/NodeModule`
