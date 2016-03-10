@@ -19,7 +19,7 @@ exports.opcua = opcua;
 //========================= Connection Handling ====================================
 //==================================================================================
 
-opcua.prototype.connect = function(endpointurl, callback){
+opcua.prototype.connectCB = function(endpointurl, callback){
   var self = this;
 
   var nodeopcua = require('node-opcua');
@@ -64,12 +64,12 @@ opcua.prototype.connect = function(endpointurl, callback){
   });
 };
 
-opcua.prototype.connectQ = function(endpointurl){
+opcua.prototype.connect = function(endpointurl){
   var self = this;
 
   // Create a promise based API for the connect function
-  return Q.promise(function(resolve){
-    self.connect(endpointurl, resolve);
+  return new Promise(function(resolve){
+    self.connectCB(endpointurl, resolve);
   });
 };
 
@@ -112,12 +112,12 @@ opcua.prototype.disconnectQ = function(){
 /**
  * Read an Array of nodeids
  *
- * Basic function. It is used by several derivated functions like readArrayQ and read.
+ * Basic function. It is used by several derivated functions like readArray and readCB.
  *
  * @param nodes
  * @param callback
  */
-opcua.prototype.readArray = function(nodes, callback) {
+opcua.prototype.readArrayCB = function(nodes, callback) {
   var self = this;
 
   var max_age = 0; // what does it mean?
@@ -138,49 +138,49 @@ opcua.prototype.readArray = function(nodes, callback) {
  * Read only one element
  *
  * @experimental - not tested
- * @uses readArray()
+ * @uses readArrayCB()
  * @param node
  * @param callback
  */
-opcua.prototype.read = function(node, callback){
+opcua.prototype.readCB = function(node, callback){
   var self = this;
 
-  var result = self.readArray([node], function(err, result){
+  self.readArrayCB([node], function(err, result){
     callback(err, result.pop());
   });
 };
 
 /**
- * Promise API for readArray()
- * @uses readArray()
+ * Promise API for readArrayCB()
+ * @uses readArrayCB()
  * @param nodes
  * @returns {Promise}
  */
-opcua.prototype.readArrayQ = function(nodes){
+opcua.prototype.readArray = function(nodes){
   var self = this;
 
-  return Q.promise(function(resolve, reject){
-    self.readArray(nodes, function(err, results){
+  return new Promise(function (resolve, reject) {
+    self.readArrayCB(nodes, function(err, results){
       if(err){
         reject(err);
       }
       resolve(results);
-    })
+    });
   });
 };
 
 /**
  * Read one element
  *
- * @uses readArrayQ()
+ * @uses readArray()
  * @param node
  */
-opcua.prototype.readQ = function(node){
+opcua.prototype.read = function(node){
   var self = this;
 
-  return self.readArrayQ([node])
+  return self.readArray([node])
     .then(function(results){
-      return Q.promise(function(resolve){
+      return new Promise(function(resolve){
         resolve(results.pop());
       });
     });
@@ -190,7 +190,7 @@ opcua.prototype.readQ = function(node){
 //========================= Write Element ==========================================
 //==================================================================================
 
-opcua.prototype.write = function(nodeId, value, type, callback){
+opcua.prototype.writeCB = function(nodeId, value, type, callback){
   var self = this;
 
   var nodeopcua = require('node-opcua');
@@ -212,20 +212,20 @@ opcua.prototype.write = function(nodeId, value, type, callback){
     }
     callback(err,results.pop());
   });
-}
+};
 
-opcua.prototype.writeQ = function(nodeId, value, type){
+opcua.prototype.write = function(nodeId, value, type){
   var self = this;
 
-  return Q.promise(function(resolve, reject){
-    self.write(nodeId, value, type, function(err, result){
+  return new Promise(function(resolve, reject){
+    self.writeCB(nodeId, value, type, function(err, result){
       if(!err){
         resolve(result);
       } else {
         reject(err);
       }
     });
-  })
+  });
 };
 
 //==================================================================================

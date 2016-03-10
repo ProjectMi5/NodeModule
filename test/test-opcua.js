@@ -20,18 +20,18 @@ describe('Test OPC UA library', function(){
 
     var nodeId = 'MI5.Module2501.Input.SkillInput.SkillInput0.Execute';
 
-    describe('#connectQ() connect to mock opc ua server', function() {
+    describe('#connect() connect to mock opc ua server', function() {
       it('opc.connected should be true', function () {
-        return opcua.connectQ(config.endpointurl)
+        return opcua.connect(config.endpointurl)
           .then(function () {
             assert.isTrue(opcua.connected);
           });
       });
     });
 
-    describe('#readArrayQ() read an array of nodes', function(){
+    describe('#readArray() read an array of nodes', function(){
       it('read one boolean element', function(){
-        return opcua.readArrayQ([nodeId])
+        return opcua.readArray([nodeId])
           .then(function(results){
             console.log(results);
 
@@ -42,9 +42,9 @@ describe('Test OPC UA library', function(){
       });
     });
 
-    describe('#readQ()', function(){
+    describe('#read()', function(){
       it('read one element', function(){
-        return opcua.readQ(nodeId)
+        return opcua.read(nodeId)
           .then(function(result){
             console.log(result);
 
@@ -54,16 +54,16 @@ describe('Test OPC UA library', function(){
       });
     });
 
-    describe('#write()', function(){
-      it('should overwrite execute with true', function(done){ //callback needed, since write is cb function
-        opcua.write(nodeId, true, 'Boolean', function(err, result){
+    describe('#writeCB()', function(){
+      it('should overwrite execute with true', function(done){ //callback needed, since writeCB is cb function
+        opcua.writeCB(nodeId, true, 'Boolean', function(err, result){
           console.log(err, result);
 
           assert.isNull(err);
           assert.equal(result.name,'Good');
 
           // Test
-          opcua.readQ(nodeId)
+          opcua.read(nodeId)
             .then(function(result){
               assert.isTrue(result.value);
             }).done(done); // catch exceptions caught in the promise chain by envoking final done callback
@@ -71,19 +71,19 @@ describe('Test OPC UA library', function(){
       });
     });
 
-    describe('#writeQ()', function(){
+    describe('#write()', function(){
       it('should overwrite execute with false', function(){
-        return opcua.writeQ(nodeId, true, 'Boolean')
+        return opcua.write(nodeId, true, 'Boolean')
           .then(function(result){
             assert.equal(result.name,'Good');
 
             // Test
-            return opcua.readQ(nodeId)
+            return opcua.read(nodeId)
               .then(function(result){
                 assert.isTrue(result.value);
               });
           })
-          .fail(function(err){
+          .catch(function(err){
             assert.isNull(err);
           });
       });
@@ -110,8 +110,8 @@ describe('Test OPC UA library', function(){
               done();
             });
 
-            opcua.writeQ(nodeId, false, 'Boolean');
-            opcua.writeQ(nodeId, true, 'Boolean');
+            opcua.write(nodeId, false, 'Boolean');
+            opcua.write(nodeId, true, 'Boolean');
 
           });
       });

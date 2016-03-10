@@ -93,7 +93,7 @@ var helper = {
    * returns Node-OPCUA Datatype according to normal datatype.
    *
    * e.g.: value
-   *          <scalar> the value to write (e.g. "hallo", 1, 23, 2.5, true)
+   *          <scalar> the value to writeCB (e.g. "hallo", 1, 23, 2.5, true)
    *
    * @param type
    *          <string> corresponding type (e.g. String, Int16, Int32, Float,
