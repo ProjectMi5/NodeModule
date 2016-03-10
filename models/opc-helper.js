@@ -2,7 +2,7 @@
  * Created by Thomas on 27.08.2015.
  */
 var assert = require("better-assert");
-var _ = require("underscore");
+var _ = require("lodash");
 
 /**
  * Helper Class
