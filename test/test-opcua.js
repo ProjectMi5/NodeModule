@@ -9,6 +9,7 @@ var assert = require('chai').assert;
 describe('Test OPC UA library', function(){
 
   before(function(done){
+    this.timeout(5*1000);
     var opcuaserver = require('./mock/opcua-server');
     opcuaserver.instance().done(done); //wait until server is started
   });
@@ -84,6 +85,34 @@ describe('Test OPC UA library', function(){
           })
           .fail(function(err){
             assert.isNull(err);
+          });
+      });
+    });
+
+    describe('#subscribe()', function(){
+      it('should create a subscription', function(){
+        return opcua.subscribe()
+          .then(function(result){
+            assert.equal(result.status,'ok');
+            //console.log(opcua.subscription);
+          });
+      });
+    });
+
+    describe('#monitor()', function(){
+      it('should monitor an item (subscription required)', function(done){
+        opcua.monitor(nodeId)
+          .then(function(monitoredItem){
+            assert(typeof monitoredItem != 'undefined', 'monitoredItem not undefined');
+            monitoredItem.on('changed', function(data){
+              console.log('changed value', data.value.value);
+              assert(data.value.value == true, 'monitored a change');
+              done();
+            });
+
+            opcua.writeQ(nodeId, false, 'Boolean');
+            opcua.writeQ(nodeId, true, 'Boolean');
+
           });
       });
     });

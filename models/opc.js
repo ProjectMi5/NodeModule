@@ -4,6 +4,7 @@
 
 var async = require("async");
 var Q = require("q");
+var Promise = require('bluebird');
 //var md5 = require("md5");
 
 var opcua = function(){
@@ -225,6 +226,71 @@ opcua.prototype.writeQ = function(nodeId, value, type){
       }
     });
   })
+};
+
+//==================================================================================
+//========================= Subscribe / Monitor ====================================
+//==================================================================================
+
+opcua.prototype.subscribe = function(nodeId) {
+  var nodeopcua = require('node-opcua');
+
+  var self = this;
+  return new Promise(function(resolve, reject) {
+
+    var subscriptionSettings = {
+      requestedPublishingInterval : 1000,
+      requestedLifetimeCount : 100, // 10 // if not present, subscribtion
+                                    // gets terminated soon.
+      requestedMaxKeepAliveCount : 10, // 2
+      maxNotificationsPerPublish : 10,
+      publishingEnabled : true,
+      priority : 10
+    };
+
+    self.subscription = new nodeopcua.ClientSubscription(self.session,subscriptionSettings);
+
+    self.subscription.on("started", function() {
+      console.log("mi5Subscribe: subscription started - subscriptionId=",
+        opcua.subscription.subscriptionId);
+    });
+
+    self.subscription.on("keepalive", function() {
+      console.log('SUBS: keepalive');
+    }).on("terminated", function() {
+      console.log('SUBS: terminated');
+    });
+
+    resolve({status: 'ok', description: 'subscription created'});
+  });
+};
+
+opcua.prototype.monitor = function(nodes) {
+  var nodeopcua = require('node-opcua');
+
+  var self = this;
+
+  nodes = [nodes];
+  nodes = nodes.map(helper.checkAndCorrectNodeId);
+  nodes = nodes.map(helper.modifiyNodeArray);
+  nodes = nodes.map(helper.addAtributeId);
+
+  // Monitor settings
+  var requestedParameters = {
+    samplingInterval : 100,
+    discardOldest : true,
+    queueSize : 1 // for mqtt publisher, take only 1
+  };
+  var timestampToReturn = nodeopcua.read_service.TimestampsToReturn.Both;
+
+  return new Promise(function(resolve) {
+    var monitoredNode = self.subscription.monitor(nodes[0],
+      requestedParameters, timestampToReturn);
+
+    setTimeout(function(){
+      resolve(monitoredNode);
+    },0);
+  });
 };
 
 //==================================================================================
