@@ -71,7 +71,7 @@ opcua.prototype.connect = function(endpointurl){
   });
 };
 
-opcua.prototype.disconnect = function(callback){
+opcua.prototype.disconnectCB = function(callback){
   var self = this;
 
   if (typeof self.client !== 'undefined') {
@@ -89,11 +89,11 @@ opcua.prototype.disconnect = function(callback){
   }
 };
 
-opcua.prototype.disconnectQ = function(){
+opcua.prototype.disconnect = function(){
   var self = this;
 
-  return Q.promise(function(resolve, reject){
-    self.disconnect(function(err){
+  return new Promise(function(resolve, reject){
+    self.disconnectCB(function(err){
       if(!err){
         resolve();
       } else {

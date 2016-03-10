@@ -117,9 +117,9 @@ describe('Test OPC UA library', function(){
       });
     });
 
-    describe('#disconnectQ() from mock opc ua server', function(){
+    describe('#disconnect() from mock opc ua server', function(){
       it('opc.connected should be false', function(){
-        return opcua.disconnectQ()
+        return opcua.disconnect()
           .then(function() {
             assert.isFalse(opcua.connected, 'no connection');
           });
