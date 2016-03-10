@@ -3,9 +3,7 @@
  */
 
 var async = require("async");
-var Q = require("q");
 var Promise = require('bluebird');
-//var md5 = require("md5");
 
 var opcua = function(){
   this.client = false;
