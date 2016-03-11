@@ -34,6 +34,13 @@ function construct_my_address_space(server) {
   server.engine.addFolder("Input", {browseName: "SkillInput"});
   server.engine.addFolder("SkillInput", {browseName: "SkillInput0"}); // old Array structure
   createOpcuaVariable('SkillInput0', 'MI5.Module2501.Input.SkillInput.SkillInput0.Execute', 'Boolean', false);
+  server.engine.addFolder("SkillInput0", {browseName: "ParameterSI0"}); // Folder needs unique name, therfore deviation from module-interface
+  server.engine.addFolder("ParameterSI0", {browseName: "ParameterSI00"}); // temp convention: SOx for SkillOutputx, Parameter Count, SOxy
+  createOpcuaVariable('ParameterSI00', 'MI5.Module2501.Input.SkillInput.SkillInput0.Parameter.Parameter0.Value', 'Int16', 0);
+  createOpcuaVariable('ParameterSI00', 'MI5.Module2501.Input.SkillInput.SkillInput0.Parameter.Parameter0.StringValue', 'String', '');
+  server.engine.addFolder("ParameterSI0", {browseName: "ParameterSI01"}); // temp convention: SOx for SkillOutputx, Parameter Count, SOxy
+  createOpcuaVariable('ParameterSI01', 'MI5.Module2501.Input.SkillInput.SkillInput0.Parameter.Parameter1.Value', 'Int16', 0);
+  createOpcuaVariable('ParameterSI01', 'MI5.Module2501.Input.SkillInput.SkillInput0.Parameter.Parameter1.StringValue', 'String', '');
 
   // Module-Interface Output
   server.engine.addFolder("Module2501", {browseName: "Output"});
