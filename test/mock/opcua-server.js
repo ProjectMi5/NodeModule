@@ -4,7 +4,7 @@
 var opcua = require("node-opcua");
 
 // Promise API for server createion
-var Q = require('q');
+var Promise = require('bluebird');
 
 // Let's create an instance of OPCUAServer
 var server = new opcua.OPCUAServer({
@@ -121,20 +121,20 @@ function construct_my_address_space(server) {
 /**
  * Promised based API for server
  *
- * usage: serverQ()
+ * usage: mi5Server()
  *         .then(post_initialize)
  *         .then(start_server);
  * @returns {Promise}
  */
-var serverQ = function(){
-  return Q.Promise(function(resolve){
+var mi5Server = function(){
+  return new Promise(function(resolve){
     server.initialize(resolve);
   });
 };
 // exports a promise, so that the sole require does not start a server.
 exports.instance = function(){
-  return Q.promise(function(resolve){
-    serverQ()
+  return new Promise(function(resolve){
+    mi5Server()
       .then(post_initialize)
       .then(start_server)
       .then(resolve);
@@ -148,7 +148,7 @@ exports.instance = function(){
  * // $..PassiveModule\test\mock>node opcua-server.js --start
  */
 if(process.argv.pop() == '--start'){
-  serverQ()
+  mi5Server()
     .then(post_initialize)
     .then(start_server)
     .catch(console.log);
@@ -163,7 +163,7 @@ if(process.argv.pop() == '--start'){
 function post_initialize() {
   console.log("initialized");
 
-  return Q.promise(function(resolve){
+  return new Promise(function(resolve){
     construct_my_address_space(server);
     resolve();
   });
@@ -175,7 +175,7 @@ function post_initialize() {
  * @returns {Promise}
  */
 function start_server(){
-  return Q.promise(function(resolve){
+  return new Promise(function(resolve){
     server.start(function(err) {
       console.log('err',err);
       console.log("Server is now listening ... ( press CTRL+C to stop)");

@@ -7,7 +7,7 @@ var config = {
   position  : 1345,
   moduleName: 'Input Module',
 
-  endpointurl : 'opc.tcp://localhost:4334/',
+  endpointurl : 'opc.tcp://localhost:4334/'
 };
 
 module.exports = config;
